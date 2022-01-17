@@ -55,16 +55,12 @@ def reconstruction_dataset(path):
     file_list = os.listdir(path + 'data/')
     folder_name = path.replace("/dataset/", "/aae_results/")
     create_folder(folder_name)
-    # create_folder(folder_name + 'aae_generated')
-    # create_folder(folder_name + 'original')
+    create_folder(folder_name + "data/")
 
     netE, netG = get_models()
     for file_name in file_list:
-        # copyfile(path + 'data/' + file_name, folder_name + 'original/' + file_name)
-        # copyfile(path + 'data/' + file_name, temp_path + 'data/' + file_name)
         copyfile(path + 'data/' + file_name, temp_path + 'data/' + file_name)
-        # save_generated_version(netE, netG, folder_name + 'aae_generated/' + file_name)
-        save_generated_version(netE, netG, folder_name + file_name)
+        save_generated_version(netE, netG, folder_name + "data/" + file_name)
         os.remove(temp_path + 'data/' + file_name)
 
 
