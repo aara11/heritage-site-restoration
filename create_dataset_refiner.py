@@ -8,8 +8,8 @@ training_path = "./data/dataset/training_data/"
 validation_path = "./data/dataset/validation_data/"
 create_folder("./data/aae_results/")
 
-encoder_path = './results/aae_models/Q_encoder_weights_120.pt'
-decoder_path = './results/aae_models/P_encoder_weights_120.pt'
+encoder_path = './results/aae_models/Q_encoder_weights_1600.pt'
+decoder_path = './results/aae_models/P_encoder_weights_1600.pt'
 z_dim = 100
 temp_path = './temp/'
 create_folder(temp_path)
