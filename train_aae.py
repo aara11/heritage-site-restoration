@@ -17,8 +17,8 @@ D_gauss = D_net_gauss()  # .cuda()
 batch_size = 64
 
 # Set learning rates
-gen_lr = 0.002  # 0.0001
-reg_lr = 0.0002  # 0.00005
+gen_lr = 0.002
+reg_lr = 0.0002
 
 create_folder("./results/")
 create_folder("./results/aae_results/")
@@ -53,9 +53,7 @@ for stp in range(total_step):
     def_rec_loss = nn.MSELoss()
     p = X_sample[0][0]
     recon_loss = def_rec_loss(X_sample, images)
-    #    print(recon_loss)
     recon_loss.backward()
-    #    print(recon_loss)
     optim_P.step()
     optim_Q_enc.step()
 
@@ -87,7 +85,6 @@ for stp in range(total_step):
                 distri[i][j] = torch.normal(mean=0, std=torch.ones(1))[0]
 
     z_fake_gauss = Variable(distri)
-    #    z_fake_gauss = Q(images)
     D_fake_gauss = D_gauss(z_fake_gauss)
 
     G_loss = -torch.mean(torch.log(D_fake_gauss + EPS))
@@ -111,10 +108,7 @@ for stp in range(total_step):
 
         images = next(dev)
         for i in range(len(images)):
-            img = images[i][0].detach().numpy()  # .astype(np.uint8)
-            # save_img(save_path + str(i) + '.jpg', img)
-            # img = Image.fromarray(img)
-            # img.save(save_path + str(i) + '.jpg')
+            img = images[i][0].detach().numpy()
             imsave(save_path + str(i) + '.jpg', img)
 
         images_gen = P(Q(images))
