@@ -1,11 +1,11 @@
 # heritage-site-restoration
 
-##Dataset
+## Dataset
 
-##Methodology
+## Methodology
 
-##Results
+## Results
 
 
-##References
+## References
 
