@@ -1,4 +1,5 @@
 import cv2
+import numpy as np
 from skimage import exposure
 from constants import *
 from utils import *
