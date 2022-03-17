@@ -16,16 +16,16 @@ Bishnupur Heritage Image Dataset[1] is used for this project. This Dataset consi
 ### Dataset Preparation
 For obtaining the two dimensional frames, warp perspective transform[2] is performed. Manually selected portion of the wall to obtain 3×3 affine transform matrix T which is then used to compute the geometrically correct version. This warped image is further segmented to obtain individual square panels of 64×64 pixels training and testing purpose.
 
-######Script: 
+###### Script: 
 data_generate.py
 
 #### Gray scale conversion
 They are converted to grayscale by histogram equalization.
 
-######Script: data_binarization_resize.py
+###### Script: data_binarization_resize.py
 Split the dataset into Training, Validation and Testing datasets.
 
-######Script: split_dateset_train_validation.py
+###### Script: split_dateset_train_validation.py
 
 ### Methodology
 #### Deep Generative Adversarial Autoencoder
@@ -45,7 +45,7 @@ Discriminator takes as input the encoding in the bottleneck layer as input and c
 The Adam optimizer is used with β1 = 0.9, β2 = 0.999 and ε = 10−8. The model is trained for 120 epochs with batch size 32 and learning rate of 0.002 for both the generator optimizer and the regulation optimizer.
 ![Loss Functions](https://github.com/aara11/heritage-site-restoration/blob/main/doc/loss%20function.png?raw=true)
 
-######Scripts:
+###### Scripts:
 Train the model - train_aae.py 
 
 Plot Loss -  plot_logger_loss.py
@@ -67,14 +67,14 @@ First the local context of the region for input-to-state component of LSTM is co
 ##### Training Specification:
 The model gives best results for 7 recurrent layer processing for each pixel and 40 output features per gate. The model is trained for 22 epochs with batch size 16. RMSProp optimizer is used with learning rate = 0.005, α = 0.99 and epsilon = 10−08. 
 
-######Scripts:
+###### Scripts:
 
 Create dataset for reconstruction engine - create_dataset_refiner.py
 
 Train pixel-level refiner - train_pixel_rnn.py
 
 ### Results
-######Scripts:
+###### Scripts:
 compare_cosine_similarity_vgg penultimate.py
 
 compare_SSIM_scores.py
