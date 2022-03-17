@@ -2,9 +2,10 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 z_dim = 100
+dropout_prob = 0
 
 
-# Encoderlog
+# Encoder
 class Q_net(nn.Module):
     def __init__(self):
         super(Q_net, self).__init__()
@@ -13,30 +14,35 @@ class Q_net(nn.Module):
         self.dim = z_dim
         convblock = nn.Sequential(
             nn.Conv2d(1, 10, 3, 1, padding=1, bias=True),
-            nn.Conv2d(10, 10, 3, 1, padding=1, bias=True),
+            nn.Conv2d(10, 10, 3, 2, padding=1, bias=True),
             nn.BatchNorm2d(10, eps=1e-05, momentum=0.9),
             nn.MaxPool2d(kernel_size=2, stride=2, padding=0),
             nn.ReLU(True),
+            nn.Dropout(dropout_prob),
             nn.Conv2d(10, 20, 3, 1, padding=1, bias=True),
-            nn.Conv2d(20, 20, 3, 1, padding=1, bias=True),
+            nn.Conv2d(20, 20, 3, 2, padding=1, bias=True),
             nn.BatchNorm2d(20, eps=1e-05, momentum=0.9),
             nn.MaxPool2d(kernel_size=2, stride=2, padding=0),
             nn.ReLU(True),
+            nn.Dropout(dropout_prob),
             nn.Conv2d(20, 20, 3, 1, padding=1, bias=True),
-            nn.Conv2d(20, 20, 3, 1, padding=1, bias=True),
+            nn.Conv2d(20, 20, 3, 2, padding=1, bias=True),
             nn.BatchNorm2d(20, eps=1e-05, momentum=0.9),
             nn.MaxPool2d(kernel_size=2, stride=2, padding=0),
             nn.ReLU(True),
+            nn.Dropout(dropout_prob),
             nn.Conv2d(20, 30, 3, 1, padding=1, bias=True),
-            nn.Conv2d(30, 30, 3, 1, padding=1, bias=True),
+            nn.Conv2d(30, 30, 3, 2, padding=1, bias=True),
             nn.BatchNorm2d(30, eps=1e-05, momentum=0.9),
             nn.MaxPool2d(kernel_size=2, stride=2, padding=0),
             nn.ReLU(True),
+            nn.Dropout(dropout_prob),
             nn.Conv2d(30, 30, 3, 1, padding=1, bias=True),
-            nn.Conv2d(30, 30, 3, 1, padding=1, bias=True),
+            nn.Conv2d(30, 30, 3, 2, padding=1, bias=True),
             nn.BatchNorm2d(30, eps=1e-05, momentum=0.9),
             nn.MaxPool2d(kernel_size=2, stride=2, padding=0),
             nn.ReLU(True),
+            nn.Dropout(dropout_prob),
         )
         self.main = convblock
         self.linear = nn.Linear(4 * 30, self.dim)
@@ -59,33 +65,33 @@ class P_net(nn.Module):
         preprocess2 = nn.Sequential(
             nn.ConvTranspose2d(30, 30, kernel_size=4, stride=2, padding=1),
             nn.BatchNorm2d(30, eps=1e-05, momentum=0.9),
-            nn.ReLU(True),
+            nn.LeakyReLU(0.2),
         )
         block1 = nn.Sequential(
             nn.ConvTranspose2d(30, 30, kernel_size=3, stride=1, padding=1),
             nn.ConvTranspose2d(30, 30, kernel_size=4, stride=2, padding=1),
             nn.BatchNorm2d(30, eps=1e-05, momentum=0.9),
-            nn.ReLU(True),
+            nn.LeakyReLU(0.2),
         )
         block2 = nn.Sequential(
             nn.ConvTranspose2d(30, 30, kernel_size=3, stride=1, padding=1),
             nn.ConvTranspose2d(30, 20, kernel_size=4, stride=2, padding=1),
             nn.BatchNorm2d(20, eps=1e-05, momentum=0.9),
-            nn.ReLU(True),
+            nn.LeakyReLU(0.2),
         )
         block3 = nn.Sequential(
 
             nn.ConvTranspose2d(20, 20, kernel_size=3, stride=1, padding=1),
             nn.ConvTranspose2d(20, 20, kernel_size=4, stride=2, padding=1),
             nn.BatchNorm2d(20, eps=1e-05, momentum=0.9),
-            nn.ReLU(True),
+            nn.LeakyReLU(0.2),
         )
         block4 = nn.Sequential(
 
             nn.ConvTranspose2d(20, 20, kernel_size=3, stride=1, padding=1),
             nn.ConvTranspose2d(20, 10, kernel_size=4, stride=2, padding=1),
             nn.BatchNorm2d(10, eps=1e-05, momentum=0.9),
-            nn.ReLU(True),
+            nn.LeakyReLU(0.2),
         )
         deconv_out = nn.Sequential(
             nn.ConvTranspose2d(10, 10, kernel_size=3, stride=1, padding=1),
@@ -117,9 +123,9 @@ class P_net(nn.Module):
 class D_net_gauss(nn.Module):
     def __init__(self):
         super(D_net_gauss, self).__init__()
-        self.lin1 = nn.Linear(z_dim, 256)
-        self.lin2 = nn.Linear(256, 256)
-        self.lin3 = nn.Linear(256, 1)
+        self.lin1 = nn.Linear(z_dim, 1024)
+        self.lin2 = nn.Linear(1024, 1024)
+        self.lin3 = nn.Linear(1024, 1)
 
     def forward(self, x):
         x = self.lin1(x)
